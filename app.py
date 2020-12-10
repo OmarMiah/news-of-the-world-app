@@ -15,21 +15,21 @@ def remove_punctuation(document):
     document = re.sub(r'[^\w\s]','',document)
     return document
 
-def remove_stopword(string):
-    words = word_tokenize(string)
-    accepted_bag = []
-    for element in words:
-        if element not in stopwords:
-            accepted_bag.append(element)
+# def remove_stopword(string):
+#     words = word_tokenize(string)
+#     accepted_bag = []
+#     for element in words:
+#         if element not in stopwords:
+#             accepted_bag.append(element)
             
-    string = ' '.join(accepted_bag)
+#     string = ' '.join(accepted_bag)
     
-    return string
+#     return string
 
 def text_pipeline(input_string):
     input_string = to_lower(input_string)
     input_string = remove_punctuation(input_string)
-    input_string = remove_stopword(input_string)
+    # input_string = remove_stopword(input_string)
     return input_string
 
 app = flask.Flask(__name__, template_folder='templates')
