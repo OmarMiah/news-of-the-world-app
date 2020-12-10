@@ -8,16 +8,6 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
-import gensim
-from gensim.utils import simple_preprocess 
-from gensim.parsing.preprocessing import STOPWORDS
-from tensorflow.keras.preprocessing.text import one_hot, Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten, Embedding, Input, LSTM, Conv1D, MaxPool1D, Bidirectional
-from tensorflow.keras.models import Model
-
-
 def to_lower(document): 
     return document.lower()
 
@@ -75,6 +65,10 @@ def main():
         
         # Make a prediction 
         x_pred = model.predict(X)
+        
+        for i in range(1):
+            print(i)
+            print(x_pred[i])
         
         # Get the first and only value of the prediction.
         prediction = x_pred[0]
