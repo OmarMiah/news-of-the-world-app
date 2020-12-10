@@ -8,16 +8,6 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
-import gensim
-from gensim.utils import simple_preprocess 
-from gensim.parsing.preprocessing import STOPWORDS
-from tensorflow.keras.preprocessing.text import one_hot, Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten, Embedding, Input, LSTM, Conv1D, MaxPool1D, Bidirectional
-from tensorflow.keras.models import Model
-
-
 def to_lower(document): 
     return document.lower()
 
@@ -25,37 +15,33 @@ def remove_punctuation(document):
     document = re.sub(r'[^\w\s]','',document)
     return document
 
-# def remove_stopword(string):
-#     words = word_tokenize(string)
-#     accepted_bag = []
-#     for element in words:
-#         if element not in stopwords:
-#             accepted_bag.append(element)
+def remove_stopword(string):
+    words = word_tokenize(string)
+    accepted_bag = []
+    for element in words:
+        if element not in stopwords:
+            accepted_bag.append(element)
             
-#     string = ' '.join(accepted_bag)
+    string = ' '.join(accepted_bag)
     
-#     return string
+    return string
 
 def text_pipeline(input_string):
     input_string = to_lower(input_string)
     input_string = remove_punctuation(input_string)
-#     input_string = remove_stopword(input_string)
+    input_string = remove_stopword(input_string)
     return input_string
 
 app = flask.Flask(__name__, template_folder='templates')
 
 path_to_vectorizer = 'models/vectorizer.pkl'
 path_to_text_classifier = 'models/naivebayes.pkl'
-# path_to_image_classifier = 'models/image-classifier.pkl'
 
 with open(path_to_vectorizer, 'rb') as f:
     vectorizer = pickle.load(f)
 
 with open(path_to_text_classifier, 'rb') as f:
     model = pickle.load(f)
-
-# with open(path_to_image_classifier, 'rb') as f:
-#     image_classifier = pickle.load(f)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
