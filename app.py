@@ -8,6 +8,16 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
+import gensim
+from gensim.utils import simple_preprocess 
+from gensim.parsing.preprocessing import STOPWORDS
+from tensorflow.keras.preprocessing.text import one_hot, Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Flatten, Embedding, Input, LSTM, Conv1D, MaxPool1D, Bidirectional
+from tensorflow.keras.models import Model
+
+
 def to_lower(document): 
     return document.lower()
 
@@ -29,19 +39,23 @@ def remove_punctuation(document):
 def text_pipeline(input_string):
     input_string = to_lower(input_string)
     input_string = remove_punctuation(input_string)
-    # input_string = remove_stopword(input_string)
+#     input_string = remove_stopword(input_string)
     return input_string
 
 app = flask.Flask(__name__, template_folder='templates')
 
 path_to_vectorizer = 'models/vectorizer.pkl'
 path_to_text_classifier = 'models/naivebayes.pkl'
+# path_to_image_classifier = 'models/image-classifier.pkl'
 
 with open(path_to_vectorizer, 'rb') as f:
     vectorizer = pickle.load(f)
 
 with open(path_to_text_classifier, 'rb') as f:
     model = pickle.load(f)
+
+# with open(path_to_image_classifier, 'rb') as f:
+#     image_classifier = pickle.load(f)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
@@ -71,10 +85,10 @@ def main():
         # Get the value of the first, and only, predicted proba.
         predicted_proba = predicted_probas[0]
 
-        # The first element in the predicted probabs is % democrat
+        # The first element in the predicted probabs is true
         percent_true = predicted_proba[0]
 
-        # The second elemnt in predicted probas is % republican
+        # The second elemnt in predicted probas is fake
         percent_fake= predicted_proba[1]
 
         return flask.render_template('main.html', 
