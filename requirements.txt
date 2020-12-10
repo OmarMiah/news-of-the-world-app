@@ -1,4 +1,5 @@
 flask
+nltyk
 pandas
 gunicorn
 sklearn
